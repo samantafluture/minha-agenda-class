@@ -5,7 +5,23 @@ export default class Form extends Component {
   state = {
     nome: "",
     telefone: "",
-  };
+  }
+
+  // Quando usamos métodos, precisamos forçar o this, através do construtor
+  // Fazer um bind -> associação de qual objeto vai ser a referência do método quando executado
+  // Já a arrow function -> this é definido no momento de criação e não de execução
+  // constructor() {
+  //   super();
+  //   this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  // }
+  
+  handleFormSubmit = (e) => {
+    e.preventDefault();
+    this.props.addContatoCallback(this.state.nome, this.state.telefone); 
+    this.setState({ nome: '', telefone: '' }); // re-setando os campos
+  }
+
+  // toda vez que eu mudo o estado, o render é chamado de novo
 
   render() {
     const msgNome = !this.state.nome && (<span className="d-block text-danger mt-1">Nome é obrigatório!</span>);
@@ -13,16 +29,16 @@ export default class Form extends Component {
     const isDisabled = !this.state.nome || !this.state.telefone;
 
     return (
-      <div class="card mb-3 p-3">
-        <form id="formCadastro" class="row">
-          <div class="form-group col-md-5">
+      <div className="card mb-3 p-3">
+        <form id="formCadastro" className="row" onSubmit={ this.handleFormSubmit }>
+          <div className="form-group col-md-5">
             <label>Nome:</label>
             <input
               type="text"
               id="inputNome"
               value={this.state.nome}
               onChange={(e) => this.setState({ nome: e.target.value })}
-              class="form-control"
+              className="form-control"
               placeholder="Digite o nome do contato aqui..."
             />
             { msgNome }
@@ -33,24 +49,24 @@ export default class Form extends Component {
             Se for falso, não exibe nada */}
           </div>
 
-          <div class="form-group col-md-5">
+          <div className="form-group col-md-5">
             <label>Telefone:</label>
             <input
               type="text"
               id="inputTelefone"
               value={this.state.telefone}
               onChange={(e) => this.setState({ telefone: e.target.value })}
-              class="form-control"
+              className="form-control"
               placeholder="Digite o telefone aqui..."
             />
             { msgTelefone }
           </div>
 
-          <div class="form-group col-md-2 mt-3 text-center">
+          <div className="form-group col-md-2 mt-3 text-center">
             <button
             disabled={isDisabled}
               id="btnSalvar"
-              class="btn btn-primary btn-lg mt-2 w-100"
+              className="btn btn-primary btn-lg mt-2 w-100"
               type="submit"
             >
               Salvar
